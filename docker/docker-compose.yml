@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: Fausto-007
+      MYSQL_DATABASE: ladybug_scraper
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  app:
+    build: .
+    command: ["python", "scripts/scheduler.py"]
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - IS_DOCKER=True
+    depends_on:
+      - db
+
+volumes:
+  db_data:
